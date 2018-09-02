@@ -57,19 +57,6 @@ handles.output = hObject;
 axes(handles.axes4);
 imshow('logo1.jpg');
 
-dbname='lprs';
-username='root';
-password='';
-driver='com.mysql.jdbc.Driver';
-dburl=['jdbc:mysql://localhost:3306/',dbname];
-javaclasspath('C:\Program Files\MATLAB\MATLAB Production Server\R2015a\java\jarext/mysql-connector-java-5.1.6-bin.jar');
-
-conn=database(dbname,username,password,driver,dburl);
-sqlquery = 'SELECT Name_Owner,Type,Plate_Number FROM registration';
-curs = exec(conn,sqlquery);
-curs = fetch(curs);
-curs.Data
-set(handles.uitable1, 'Data', curs.Data);
 
 datenow=datestr(now);
 set(handles.text11,'String',datenow);
@@ -104,6 +91,7 @@ function btnopenimage_Callback(hObject, eventdata, handles) %#ok<INUSL,DEFNU>
 % hObject    handle to btnopenimage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 [baseFileName,folder]=uigetfile('*.*','Specify an image file');
 fullimageFileName=fullfile(folder,baseFileName);
 axes1=imread(fullimageFileName);
@@ -144,8 +132,8 @@ while 1
     %*-*Uncomment line below to see lines one by one*-*-*-*
     %imshow(fl);pause(1)
     %*-*--*-*-*-*-*-*-
-    %*-*-*-*-*-Calculating connected components*-*-*-*-*-
     
+    %Calculating connected components
     L = bwlabel(imgn);
     mx=max(max(L));
     BW = edge(double(imgn),'sobel');
@@ -153,7 +141,7 @@ while 1
     for n=1:mx
         [r,c] = find(L==n);
         rc = [r c];
-        [sx sy]=size(rc); %#ok<NCOMMA,ASGLU>
+        [sx sy]=size(rc); 
         n1=zeros(imx,imy);
         for i=1:sx
             x1=rc(i,1);
@@ -161,7 +149,7 @@ while 1
             n1(x1,y1)=255;
         end
         
-        %*-*-*-*-*-END Calculating connected components*-*-*-*-*
+        %END Calculating connected components
         
         n1=~n1;
         n1=~clip(n1);
@@ -171,7 +159,7 @@ while 1
         %*-*-*-*-*-*-*-*
         
         letter=read_letter(img_r); %img to text
-        word=[word letter]; %#ok<AGROW>
+        word=[word letter];  %#ok<AGROW>
         
         set(handles.text5,'String',word);
         datenow=datestr(now);

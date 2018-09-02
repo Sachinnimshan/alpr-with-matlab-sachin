@@ -45,7 +45,7 @@ end
 
 
 % --- Executes just before Mainwindow is made visible.
-function Mainwindow_OpeningFcn(hObject, eventdata, handles, varargin)
+function Mainwindow_OpeningFcn(hObject, eventdata, handles, varargin) %#ok<INUSL>
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -90,7 +90,7 @@ uistack(ah, 'bottom');
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = Mainwindow_OutputFcn(hObject, eventdata, handles) 
+function varargout = Mainwindow_OutputFcn(hObject, eventdata, handles)  %#ok<INUSL>
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -100,10 +100,11 @@ function varargout = Mainwindow_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 % --- Executes on button press in btnopenimage.
-function btnopenimage_Callback(hObject, eventdata, handles)
+function btnopenimage_Callback(hObject, eventdata, handles) %#ok<INUSL,DEFNU>
 % hObject    handle to btnopenimage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 [baseFileName,folder]=uigetfile('*.*','Specify an image file');
 fullimageFileName=fullfile(folder,baseFileName);
 axes1=imread(fullimageFileName);
@@ -139,13 +140,13 @@ fid = fopen('log.txt', 'at'); %Opens a text for append in order to store the num
 while 1
     [fl, re]=lines(re); %Fcn 'lines' separate lines in text
     imgn=~fl;
-    axes(handles.axes7); imshow(imgn); title('{\color{cyan}EXTRACTED PLATE}');
+    axes(handles.axes7); imshow(imgn); title('{\color{cyan}EXTRACTED PLATE}'); %#ok<LAXES>
     
     %*-*Uncomment line below to see lines one by one*-*-*-*
     %imshow(fl);pause(1)
     %*-*--*-*-*-*-*-*-
-    %*-*-*-*-*-Calculating connected components*-*-*-*-*-
     
+    %Calculating connected components
     L = bwlabel(imgn);
     mx=max(max(L));
     BW = edge(double(imgn),'sobel');
@@ -153,7 +154,7 @@ while 1
     for n=1:mx
         [r,c] = find(L==n);
         rc = [r c];
-        [sx sy]=size(rc);
+        [sx sy]=size(rc); 
         n1=zeros(imx,imy);
         for i=1:sx
             x1=rc(i,1);
@@ -161,17 +162,17 @@ while 1
             n1(x1,y1)=255;
         end
         
-        %*-*-*-*-*-END Calculating connected components*-*-*-*-*
+        %END Calculating connected components
         
         n1=~n1;
         n1=~clip(n1);
         img_r=same_dim(n1);%Transf. to size 42 X 24
-        axes(handles.axes8); imshow(img_r);pause(1); title('{\color{cyan}EXTRACTING CHARACTERS}');
+        axes(handles.axes8); imshow(img_r);pause(1); title('{\color{cyan}EXTRACTING CHARACTERS}'); %#ok<LAXES>
         
         %*-*-*-*-*-*-*-*
         
         letter=read_letter(img_r); %img to text
-        word=[word letter];
+        word=[word letter];  %#ok<AGROW>
         
         set(handles.text5,'String',word);
         datenow=datestr(now);
@@ -203,8 +204,14 @@ while 1
         if numrows == 0
         set(handles.text14,'BackgroundColor',[1 0 0]);
         set(handles.text14,'ForegroundColor',[0 0 0]);
+        WarnWave = [sin(1:.6:400), sin(1:.7:400), sin(1:.4:400)];
+        Audio = audioplayer(WarnWave, 22050); %#ok<TNMLP>
+        play(Audio);
         set(handles.text14,'String','PARKING NOT ALLOWED');
         else
+            WarnWave = [sin(1:.6:400), sin(1:.7:400), sin(1:.4:400)];
+        Audio = audioplayer(WarnWave, 22050); %#ok<TNMLP>
+        play(Audio);
         set(handles.text14,'BackgroundColor',[0 0 0]);
         set(handles.text14,'ForegroundColor',[0 1 0]);
         set(handles.text14,'String','PARKING ALLOWED');
@@ -219,7 +226,7 @@ end
 fclose(fid);
 
 % --- Executes on button press in pushbutton13.
-function pushbutton13_Callback(hObject, eventdata, handles) %#ok<DEFNU>
+function pushbutton13_Callback(hObject, eventdata, handles) %#ok<INUSL,DEFNU>
 % hObject    handle to pushbutton13 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -231,7 +238,7 @@ set(handles.text14,'String','');
 
 
 % --- Executes on button press in pushbutton15.
-function pushbutton15_Callback(hObject, eventdata, handles) %#ok<DEFNU>
+function pushbutton15_Callback(hObject, eventdata, handles) %#ok<INUSL,DEFNU>
 % hObject    handle to pushbutton15 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -251,7 +258,7 @@ set(handles.uitable1, 'Data', curs.Data);
 
 
 % --- Executes on button press in btnrecentrecords.
-function btnrecentrecords_Callback(hObject, eventdata, handles)
+function btnrecentrecords_Callback(hObject, eventdata, handles) %#ok<INUSL,DEFNU>
 % hObject    handle to btnrecentrecords (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)

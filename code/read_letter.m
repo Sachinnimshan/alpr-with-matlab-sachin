@@ -2,7 +2,7 @@ function letter=read_letter(imagn)
 comp=[];
 load templates
 for n=1:36
-    sem=corr2(templates{1,n},imagn);
+    sem=corr2(templates{1,n},imagn); %#ok<USENS>
     comp=[comp sem];
 end
 vd=find(comp==max(comp));
